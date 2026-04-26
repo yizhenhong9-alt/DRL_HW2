@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cliff Walking: Q-Learning vs SARSA</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="sidebar">
+        <h2>Parameters</h2>
+        
+        <div class="input-group">
+            <label>Grid Width</label>
+            <input type="number" id="width" value="12" min="5" max="20">
+        </div>
+        <div class="input-group">
+            <label>Grid Height</label>
+            <input type="number" id="height" value="4" min="3" max="10">
+        </div>
+        <div class="input-group">
+            <label>Episodes</label>
+            <input type="number" id="episodes" value="500" min="100" max="2000">
+        </div>
+        <div class="input-group">
+            <label>Learning Rate (α)</label>
+            <input type="number" id="alpha" value="0.1" step="0.01" min="0" max="1">
+        </div>
+        <div class="input-group">
+            <label>Discount Factor (γ)</label>
+            <input type="number" id="gamma" value="0.9" step="0.01" min="0" max="1">
+        </div>
+        <div class="input-group">
+            <label>Epsilon (ε)</label>
+            <input type="number" id="epsilon" value="0.1" step="0.01" min="0" max="1">
+        </div>
+        
+        <button id="train-btn">Run Training</button>
+
+        <div class="legend" style="margin-top: auto;">
+            <div class="legend-item"><div class="dot" style="background: var(--start);"></div> Start</div>
+            <div class="legend-item"><div class="dot" style="background: var(--goal);"></div> Goal</div>
+            <div class="legend-item"><div class="dot" style="background: var(--cliff);"></div> Cliff</div>
+            <div class="legend-item"><div class="dot" style="background: var(--path-q);"></div> Q-Path</div>
+            <div class="legend-item"><div class="dot" style="background: var(--path-sarsa);"></div> SARSA-Path</div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <h1>Cliff Walking Comparison</h1>
+        <p class="subtitle">Detailed analysis of Q-Learning and SARSA algorithms.</p>
+
+        <div class="dashboard-grid">
+            <div class="card">
+                <h2>📈 Learning Performance</h2>
+                <div id="chart-container">
+                    <canvas id="rewardChart"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🗺️ Policy Behavior</h2>
+                <div class="grid-display">
+                    <div class="grid-section">
+                        <span class="metric-badge badge-q">Q-Learning (Off-policy)</span>
+                        <div id="q-grid" class="grid"></div>
+                    </div>
+                    <div class="grid-section">
+                        <span class="metric-badge badge-sarsa">SARSA (On-policy)</span>
+                        <div id="sarsa-grid" class="grid"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>🔍 Comparison & Discussion</h2>
+            <div class="analysis-content">
+                <div class="analysis-item">
+                    <h3>1. 學習表現 (Performance)</h3>
+                    <p id="analysis-perf">等待訓練開始... Q-Learning 通常收斂較快，因為它在更新時總是考慮最優的下一個動作（Greedy）。SARSA 則因為考慮了當前策略下的實際動作，路徑選擇較為謹慎。</p>
+                </div>
+                <div class="analysis-item">
+                    <h3>2. 策略行為 (Policy)</h3>
+                    <p id="analysis-policy">觀察最終路徑：Q-Learning 是否緊貼懸崖？SARSA 是否選擇繞路？通常 Q-Learning 傾向冒險最短路徑，而 SARSA 傾向保守安全路徑。</p>
+                </div>
+                <div class="analysis-item">
+                    <h3>3. 穩定性分析 (Stability)</h3>
+                    <p id="analysis-stability">比較訓練過程中的波動程度。由於探索（$\epsilon$）的存在，Q-Learning 在訓練中頻繁掉入懸崖，波動較大。SARSA 則因為將探索納入考慮，表現較為穩定。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
